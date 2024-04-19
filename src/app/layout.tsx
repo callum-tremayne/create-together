@@ -9,7 +9,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Create -> Together",
-  description: "Collaboration Application",
+  description: "A Collaborative Working web application for project collaboration.",
 };
 
 export default function RootLayout({
