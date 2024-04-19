@@ -57,19 +57,20 @@ function AccountDropdown() {
 
 export function Header() {
   return (
-    <header className="bg-gray-100 py-2 dark:bg-gray-900 container mx-auto">
-      <div className="flex justify-between items-center">
+    <header className="bg-gray-100 py-2 dark:bg-gray-900 mx-auto">
+      <div className="container flex justify-between items-center">
         <Link
           href="/"
-          className="flex gap-2 items-center text-xl hover:underline"
+          className="flex items-center text-xl hover:underline"
         >
           <Image
             src="/icon.png"
+            className="mr-6"
             width="60"
             height="60"
             alt="the application icon of collaborating hands on a computer"
           />
-          Create <FoldHorizontalIcon /> Together
+          CREATE<FoldHorizontalIcon />TOGETHER
         </Link>
         <div className="flex items-center gap-4">
           <AccountDropdown />
