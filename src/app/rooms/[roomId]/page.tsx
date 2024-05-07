@@ -3,8 +3,10 @@ import { GithubIcon } from "lucide-react";
 import Link from "next/link";
 import TagsList, { splitTags } from "@/components/tags-list";
 import { CreateTogetherVideo } from "./video-player";
+import { unstable_noStore } from "next/cache";
 
 export default async function RoomPage(props: { params: { roomId: string } }) {
+  unstable_noStore();
   const roomId = props.params.roomId;
 
   const room = await getRoom(roomId);
@@ -37,7 +39,6 @@ export default async function RoomPage(props: { params: { roomId: string } }) {
                 Github Project
               </Link>
             )}
-            T
           </div>
         </div>
       </div>

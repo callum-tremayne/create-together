@@ -1,21 +1,21 @@
 "use client";
 
+import { Room } from "@/db/schema";
 import {
+  Call,
+  CallControls,
+  SpeakerLayout,
   StreamCall,
+  StreamTheme,
   StreamVideo,
   StreamVideoClient,
-  Call,
-  StreamTheme,
-  SpeakerLayout,
-  CallControls,
 } from "@stream-io/video-react-sdk";
 import "@stream-io/video-react-sdk/dist/css/styles.css";
-import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
-import { Room } from "@/db/schema";
+import { useEffect, useState } from "react";
 import { generateTokenAction } from "./actions";
 
-const apiKey = process.env.GET_STREAM_API_KEY!;
+const apiKey = process.env.NEXT_PUBLIC_GET_STREAM_API_KEY!;
 
 export function CreateTogetherVideo({ room }: { room: Room }) {
   const session = useSession();
@@ -33,9 +33,9 @@ export function CreateTogetherVideo({ room }: { room: Room }) {
       user: { id: userId },
       tokenProvider: () => generateTokenAction(),
     });
-    setClient(client);
     const call = client.call("default", room.id);
     call.join({ create: true });
+    setClient(client);
     setCall(call);
 
     return () => {
