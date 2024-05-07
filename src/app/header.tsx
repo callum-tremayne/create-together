@@ -34,7 +34,10 @@ function AccountDropdown() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        <DropdownMenuItem onClick={() => signOut({ callbackUrl: "/" })} className="cursor-pointer">
+        <DropdownMenuItem
+          onClick={() => signOut({ callbackUrl: "/" })}
+          className="cursor-pointer"
+        >
           <LogOutIcon className="mr-2" />
           Sign Out
         </DropdownMenuItem>
@@ -60,6 +63,13 @@ export function Header() {
           <FoldHorizontalIcon />
           TOGETHER
         </Link>
+
+        <nav>
+          <Link className="hover:underline" href="/your-rooms">
+            Your Rooms
+          </Link>
+        </nav>
+
         <div className="flex items-center gap-4">
           {session.data && <AccountDropdown />}
           {!session.data && (
