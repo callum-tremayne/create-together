@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import { db } from "@/db";
 import Link from "next/link";
 import {
   Card,
@@ -9,19 +8,23 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Room } from "@/db/schema";
 import { GithubIcon } from "lucide-react";
 import { getRooms } from "@/services/rooms";
+import TagsList, { splitTags } from "@/components/tags-list";
 
 function RoomCard({ room }: { room: Room }) {
+
   return (
-    <Card>
+    <Card className="flex flex-col justify-between">
       <CardHeader>
         <CardTitle>{room.name}</CardTitle>
         <CardDescription>{room.description}</CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="flex gap-1">
+      <TagsList tags={splitTags(room.tags)} />
+      </CardContent>
+      <CardFooter className="flex justify-between">
         {room.githubRepo && (
           <Link
             href={room.githubRepo}
@@ -33,11 +36,6 @@ function RoomCard({ room }: { room: Room }) {
             Github Project
           </Link>
         )}
-      </CardContent>
-      <CardContent>
-        <Badge variant="outline">{room.tags}</Badge>
-      </CardContent>
-      <CardFooter>
         <Button asChild>
           <Link href={`rooms/${room.id}`}>Join Room</Link>
         </Button>
@@ -57,9 +55,9 @@ export default async function Home() {
         </Button>
       </div>
       <div className="grid grid-cols-3 gap-4">
-      {rooms.map((room) => {
-        return <RoomCard key={room.id} room={room} />;
-      })}
+        {rooms.map((room) => {
+          return <RoomCard key={room.id} room={room} />;
+        })}
       </div>
     </main>
   );
