@@ -9,7 +9,6 @@ import { splitTags } from "@/lib/utils";
 export default async function RoomPage(props: { params: { roomId: string } }) {
   unstable_noStore();
   const roomId = props.params.roomId;
-
   const room = await getRoom(roomId);
 
   if (!room) {

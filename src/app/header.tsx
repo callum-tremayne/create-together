@@ -16,7 +16,6 @@ import Link from "next/link";
 
 function AccountDropdown() {
   const session = useSession();
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -48,8 +47,10 @@ function AccountDropdown() {
 
 export function Header() {
   const session = useSession();
+  const isLoggedIn = !!session.data;
+
   return (
-    <header className="bg-gray-100 py-2 dark:bg-gray-900 mx-auto">
+    <header className="bg-gray-100 py-2 dark:bg-gray-900 mx-auto z-10 relative">
       <div className="container flex justify-between items-center">
         <Link href="/" className="flex items-center text-xl hover:underline">
           <Image
@@ -64,10 +65,17 @@ export function Header() {
           TOGETHER
         </Link>
 
-        <nav>
-          <Link className="hover:underline" href="/your-rooms">
-            Your Rooms
-          </Link>
+        <nav className="flex gap-6">
+          {isLoggedIn && (
+            <>
+              <Link className="hover:underline" href="/browse">
+                Browse
+              </Link>
+              <Link className="hover:underline" href="/your-rooms">
+                Your Rooms
+              </Link>
+            </>
+          )}
         </nav>
 
         <div className="flex items-center gap-4">
