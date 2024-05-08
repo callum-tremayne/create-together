@@ -7,41 +7,100 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
-import { FoldHorizontalIcon, LogInIcon, LogOutIcon } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import {
+  FoldHorizontalIcon,
+  LogInIcon,
+  LogOutIcon,
+  TrashIcon,
+} from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
+import { deleteAccountAction } from "./actions";
 
 function AccountDropdown() {
   const session = useSession();
+  const [open, setOpen] = useState(false);
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant={"link"}>
-          <Avatar className="mr-2">
-            <AvatarImage src={session.data?.user?.image ?? ""} />
-            <AvatarFallback>
-              {session.data?.user?.name
-                ?.split(" ")
-                .map((part) => part[0])
-                .join("")}
-            </AvatarFallback>
-          </Avatar>
-          {session.data?.user?.name}
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent>
-        <DropdownMenuItem
-          onClick={() => signOut({ callbackUrl: "/" })}
-          className="cursor-pointer"
-        >
-          <LogOutIcon className="mr-2" />
-          Sign Out
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <>
+      <AlertDialog open={open} onOpenChange={setOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              Are you sure you want to delete your account?
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete your
+              account and any data associated with it.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={async () => {
+                await deleteAccountAction();
+                signOut({ callbackUrl: "/" });
+              }}
+            >
+              Yes, delete my account
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant={"link"}>
+            <Avatar className="mr-2">
+              <AvatarImage src={session.data?.user?.image ?? ""} />
+              <AvatarFallback>
+                {session.data?.user?.name
+                  ?.split(" ")
+                  .map((part) => part[0])
+                  .join("")}
+              </AvatarFallback>
+            </Avatar>
+            {session.data?.user?.name}
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuItem
+            onClick={() => signOut({ callbackUrl: "/" })}
+            className="cursor-pointer"
+          >
+            <LogOutIcon className="mr-2" />
+            Sign Out
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem
+            onClick={() => {
+              setOpen(true);
+            }}
+            className="cursor-pointer"
+          >
+            <Button variant={"destructive"}>
+              <TrashIcon className="w-4 h-4 mr-2" />
+              Delete Account
+            </Button>
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </>
   );
 }
 
@@ -50,19 +109,17 @@ export function Header() {
   const isLoggedIn = !!session.data;
 
   return (
-    <header className="bg-gray-100 py-2 dark:bg-gray-900 mx-auto z-10 relative">
+    <header className="mx-auto py-2 z-10 relative">
       <div className="container flex justify-between items-center">
         <Link href="/" className="flex items-center text-xl hover:underline">
           <Image
-            src="/icon.png"
+            src="/logo.png"
             className="mr-6"
             width="60"
             height="60"
             alt="the application icon of collaborating hands on a computer"
           />
-          CREATE
-          <FoldHorizontalIcon />
-          TOGETHER
+          CollabSphere
         </Link>
 
         <nav className="flex gap-6">

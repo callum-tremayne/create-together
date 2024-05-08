@@ -11,7 +11,7 @@ export default function TagsList({ tags }: { tags: string[] }) {
       {tags.map((tag) => (
         <button
           onClick={() => {
-            router.push(`/?search=${tag}`);
+            router.push(`/browse/?search=${tag}`);
           }}
           className={cn(badgeVariants())}
           key={tag}

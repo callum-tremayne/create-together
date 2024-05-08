@@ -10,7 +10,6 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -37,13 +36,13 @@ export function SearchBar() {
 
   useEffect(() => {
     form.setValue("search", search ?? "");
-  },[search, form]);
+  }, [search, form]);
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     if (values.search) {
-      router.push(`/?search=${values.search}`);
+      router.push(`/browse/?search=${values.search}`);
     } else {
-      router.push("/");
+      router.push("/browse");
     }
   }
 

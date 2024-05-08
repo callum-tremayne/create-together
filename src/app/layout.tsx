@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { ModeToggle } from "@/components/mode-toggle";
 import "./globals.css";
 import { Providers } from "./providers";
 import { Header } from "./header";
 import NextTopLoader from "nextjs-toploader";
+import { Toaster } from "@/components/ui/toaster";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Create -> Together",
+  title: "CollabSphere",
   description:
     "A Collaborative Working web application for project collaboration.",
 };
@@ -25,7 +25,8 @@ export default function RootLayout({
         <Providers>
           <NextTopLoader />
           <Header />
-          {children}
+          <Toaster />
+          <div className="container mx-auto">{children}</div>
         </Providers>
       </body>
     </html>

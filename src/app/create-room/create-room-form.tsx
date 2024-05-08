@@ -17,16 +17,18 @@ import {
 import { Input } from "@/components/ui/input";
 import { createRoomAction } from "./actions";
 import { useRouter } from "next/navigation";
+import { useToast } from "@/components/ui/use-toast";
 
 const formSchema = z.object({
   name: z.string().min(1).max(50),
   description: z.string().min(1).max(250),
-  tags: z.string().min(1).max(50),
-  githubRepo: z.string().min(1).max(50),
+  tags: z.string().min(1).max(50).toLowerCase(),
+  githubRepo: z.string().min(0).max(50),
 });
 
 export function CreateRoomForm() {
-    const router = useRouter();
+  const router = useRouter();
+  const { toast } = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -38,9 +40,13 @@ export function CreateRoomForm() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    createRoomAction(values)
-    router.push("/");
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    const room = await createRoomAction(values);
+    toast({
+      title: "Room Created",
+      description: "Your room was successfully created",
+    });
+    router.push(`/rooms/${room.id}`);
   }
 
   return (
@@ -91,7 +97,10 @@ export function CreateRoomForm() {
                 List any tags related to the project.
               </FormDescription>
               <FormControl>
-                <Input placeholder="NextJS, Typescript, TailwindCSS" {...field} />
+                <Input
+                  placeholder="NextJS, Typescript, TailwindCSS"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

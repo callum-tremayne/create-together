@@ -18,6 +18,7 @@ import { Input } from "@/components/ui/input";
 import { editRoomAction } from "./actions";
 import { useParams } from "next/navigation";
 import { Room } from "@/db/schema";
+import { toast } from "@/components/ui/use-toast";
 
 const formSchema = z.object({
   name: z.string().min(1).max(50),
@@ -32,10 +33,10 @@ export function EditRoomForm({ room }: { room: Room }) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: room.name,
-      description: room.description,
-      tags: room.tags,
-      githubRepo: room.githubRepo,
+      name: room.name ?? "",
+      description: room.description ?? "",
+      tags: room.tags ?? "",
+      githubRepo: room.githubRepo ?? "",
     },
   });
 
@@ -43,6 +44,10 @@ export function EditRoomForm({ room }: { room: Room }) {
     await editRoomAction({
       id: params.roomId as string,
       ...values,
+    });
+    toast({
+      title: "Room Updated",
+      description: "Your room was successfully updated",
     });
   }
 
